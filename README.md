@@ -1,4 +1,3 @@
 # Q-ML-GUI
-![](/gitAssets/QMLUI.jpeg)
-Official: Quick Machine Learning Graphical UI Interface for Easy Live Inferencing and Model Training/Evaluation\
+![Official: Quick Machine Learning Graphical UI Interface for Easy Live Inferencing and Model Training/Evaluation\](/gitAssets/QMLUI.jpeg)
 [GNU Copyright to Waffles Studio / WafflesLabs]
