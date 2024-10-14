@@ -1,36 +1,25 @@
 import os
 import numpy as np
-import cv2
 from ultralytics import YOLO
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
-
-work_DIR = os.getcwd()
-asset = work_DIR + "\\assets\\"
-trainer_model_dir = work_DIR + "\\models\\YOLO\\"
-ready_model = work_DIR + "\\models\\pre-trained\\huamn-detection-v8n\\best.pt"
-ffmpeg_bin = work_DIR + "\\bin\\ffmpeg.exe"
-camera_id = 1
 
 
 class inferencing:
     def __init__(self, model, frame):
         self.model = model # get model from the model directory
         self.frame = frame # get frame from the feed
-        if self.frame is None:
-            return None
         self.bbx = None # bounding box
     def infer(self):
         model = YOLO(self.model) # load the model
-        for result in model.predict(self.frame, conf=0.8):
+        for result in model.predict(self.frame, conf=0.74):
             self.bbx = result
     def render(self):
         __class__.infer(self) # Calls infer automatically
         return renderbbx(self.frame, self.bbx).render()
     def hrec(self):
         return self.bbx # return the bounding box
-
 
 @staticmethod 
 class renderbbx:
@@ -44,38 +33,221 @@ class renderbbx:
         for box in self.bbx.boxes:
             x1, y1, x2, y2 = map(int, box.xyxy[0])
             # label = f"{box.names[0]}"
-            draw.rectangle([x1, y1, x2, y2], outline='red', width=2)
+            draw.rectangle([x1, y1, x2, y2], outline='red', width=3)
             # draw.text((x1, y1), label, fill='red', font=font)
         return np.array(image)
-    
+
+class live_components:
+    def __init__(self):
+        pass # Placeholder for future development
+
+class model_switcher:
+    def __init__(self):
+        pass # Placeholder 
+
+class model_trainer:
+    def __init__(self):
+        pass # Placeholder
+
+class clsout:
+    def __init__(self):
+        pass # Placeholder
+
+class window_takeover:
+    def __init__(self):
+        pass # Placeholder
+
 class dispx:
-    def __init__(self, camera_id):
-        self.camid = camera_id
-        self.capture = cv2.VideoCapture
+    def __init__(self, Frame_Width, Frame_Height, id):
+        print("Initializing base display-x! - Base code by BabyWaffles!")
+        from cv2 import VideoCapture, CAP_PROP_FRAME_HEIGHT, CAP_PROP_FRAME_WIDTH
+        from cv2_enumerate_cameras import enumerate_cameras
+        self.cameraid = id
+        self.FW = Frame_Width
+        self.FH = Frame_Height
+        self.enumerater = enumerate_cameras
+        self.capture = VideoCapture
+        self.PROP_FRAME_HEIGHT = CAP_PROP_FRAME_HEIGHT
+        self.PROP_FRAME_WIDTH = CAP_PROP_FRAME_WIDTH
+        self.valcams = None
+    def getcam(self):
+        if self.valcams is None:
+            self.valcams = self.enumerater()
+            return self.valcams
+        if self.enumerater() is None:
+            print("No Camera found! Exiting system...")
+            exit(0)
+    def setcam(self):
+        if self.cameraid is None and self.valcams != None:
+            print(f"Detected valid cameras! {self.valcams}")
+            self.cameraid = int(input("Select your camera [Based on index!]: "))
+        else:
+            print("Validated cameras not initialized...")
+            __class__.getcam(self)
+        self.capture = self.capture(self.cameraid)
+        self.capture.set(self.PROP_FRAME_HEIGHT, self.FH)
+        self.capture.set(self.PROP_FRAME_WIDTH, self.FW)
+        return
+    def build(self):
+        return self.capture
     def supercharge(self):
-        if self.capture(self.camid).isOpened():
-            pass
+        if self.valcams == None or self.cameraid == None:
+            __class__.getcam(self)
+            __class__.setcam(self)
+            return self.capture
+        else:
+            print("Manual initialization detected! Automatically compiling request...")
+            __class__.build(self)
         
-    
+class run: # Class failed to execute due to multiprocessing pickle not working properly with the multi-data multi-instruction model. -> Require to default back to manual execution [Validated by WafflesLab, result - Failed to execute.]
+    def __init__(self, res_h, res_w, ready_model):
+        from time import sleep #Task ran successfully
+        from cv2 import imshow, waitKey,destroyAllWindows #Task ran successfully
+        self.sleep = sleep #Task ran successfully
+        self.imshow = imshow #Task ran successfully
+        self.waitkey = waitKey #Task ran successfully
+        self.r_h = res_h #Task ran successfully
+        self.r_w = res_w #Task ran successfully
+        self.model = ready_model #Task ran successfully
+        self.camid = [] # Deprecated / placeholder for future development #Task ran successfully
+        self.processes = [] #Task ran successfully
+        self.displaysets = None #Task ran successfully
+        self.display = [None] #Task ran successfully
+        self.distroyAllWindows = destroyAllWindows #Task ran successfully
+    def instantiate(self): #Task ran successfully
+        self.displaysets = int(input("Input inferencing camera amount: ")) #Task ran successfully
+        self.display = [None] * self.displaysets #Task ran successfully
+        __class__.multi_func_init(self) #Task ran successfully
+    def multi_func_init(self): #Task ran successfully
+        for index in range(len(self.display)): #Task ran successfully
+            self.display[index] = dispx(self.r_w, self.r_h, None).supercharge() #Task ran successfully
+            print("Displayed successfully compiled and initialized!") #Task ran successfully
+        print("Awaiting for execution by function...") #Task ran successfully
+        self.sleep(0.1) #Task ran successfully
+    def inference_worker(self, instruction): #Task failed to execute()
+        instruct = None #Task ran successfully
+        try:  #Task failed to execute()
+            exec(instruction, {}, locals())  #Task failed to execute()
+            if instruct is None:  #Task failed to execute()
+                print("Camera could not be opened.")  #Task failed to execute()
+        except Exception as e:  #Task failed to execute()
+            print(f"Error executing instruction: {e}")  #Task failed to execute()
+        while instruct.isOpened():  #Task failed to execute()
+            success, frame = instruct.read()  #Task failed to execute()
+            annotated = inferencing(self.model, frame).render()  #Task failed to execute()
+            self.imshow("Dynamic Model Deployment Development Phase!", annotated)  #Task failed to execute()
+            if self.waitkey(1) ** 0xFF ==ord("q"):  #Task failed to execute()
+                __class__.terminate(self)  #Task failed to execute()
+    def taskmgmt_unwrapper(self): #Task ran successfully
+        from multiprocessing import Process #Task ran successfully
+        for index in range(len(self.display)): #Task ran successfully
+            instruction = self.display[index] #Task ran successfully
+            p = Process(target=self.inference_worker, args=(instruction,))  #Task failed to execute()
+            self.processes.append(p) #Task failed to execute()
+            p.start() #Task failed to execute()
+        for p in self.processes: #Task failed to execute()
+            p.join() #Task failed to execute()
+    def execute(self):  #Task ran successfully
+        __class__.instantiate(self)  #Task ran successfully
+        __class__.taskmgmt_unwrapper(self)  #Task failed to execute()
+    def terminate(self):  #Task ran successfully
+        self.distroyAllWindows()  #Task ran successfully
+        return  #Task returned successfully
+        
+# ffmpeg_bin = work_DIR + "\\bin\\ffmpeg.exe"
+# asset = work_DIR + "\\assets\\"
+# trainer_model_dir = work_DIR + "\\models\\YOLO\\"
+        
 def main():
-    cap = cv2.VideoCapture(camera_id)
-    while cap.isOpened():
-        success, frame = cap.read() #Read frames from cameraid or streaming protocols
-        
-        if frame is None:
-            print("Attempting to reconnect to >Stream<! Errx0, missing frames!")
-            cap.release()
-            cap = cv2.VideoCapture(camera_id)
+    from time import sleep
+    from cv2 import imshow, waitKey,destroyAllWindows
+    namespace = "best.pt"
+    print("Using default namespace: "+namespace)
+    work_DIR = os.getcwd()
+    ready_model = work_DIR + "\\models\\pre-trained\\huamn-detection-v8n\\"+namespace
+
+    displayx = dispx(1280, 720, None)
+    display = displayx.supercharge()
+    print("Loading model, please wait...")
+    while display.isOpened():
+        successful, frame = display.read()
+        if not successful:
+            print("Attempting to reconenct to camera, please wait...")
+            display.release()
+            sleep(0.5)
+            display = display
             continue
-        
-        annotated = inferencing(ready_model, frame).render()
-        cv2.imshow("Dynamic Model Deployment Development Phase", annotated)
-        if cv2.waitKey(1) & 0xFF == ord("q"):
-            break
+        annotate = inferencing(ready_model, frame).render()
+        imshow("Dynamic Model Deployment Development Phase!", annotate)
+        if waitKey(1) & 0xFF ==ord("q"):
+            display.release()
+            return
+    print("Successfully exited inferencing...")
 
-    
-
-
+    # run_define(display, ready_model).run()
+    # run(1280, 720, ready_model).execute()
 
 if __name__ == "__main__":
     main()
+    
+
+# class run_define:
+#     def __init__(self, video_lib, ready_model):
+#         from time import sleep
+#         from cv2 import imshow, waitKey
+#         self.sleep = sleep
+#         self.imshow = imshow
+#         self.waitkey = waitKey
+#         self.videoLib = video_lib
+#         self.ready_model = ready_model
+#     def run(self):
+#         self.videoLib.supercharge()
+#         print("Loading model, please wait!")
+#         while self.videoLib.isOpened():
+#             successful, frame = self.videoLib.read()
+#             if not successful:
+#                 print("Camera has been disconnected! Attemting to reconnect, please wait...")
+#                 self.videoLib.release()
+#                 self.sleep(2)
+#                 self.videoLib = self.videoLib
+#                 continue
+#             annotated  = inferencing(self.ready_model, frame).render()
+#             self.imshow("Dynamic Model Deployment Development Phase!", annotated)
+#             if self.waitkey(1) & 0xFF == ord("q"):
+#                 __class__.terminator(self)
+#     def terminator(self):
+#         self.videoLib.release()
+#         return
+
+# class dispx_pyocv: #Deprecated
+#     def __init__(self, F_Width, F_Height, cam_id):
+#         print("Initializing base display-x! - Base code by BabyWaffles!")
+#         from cv2 import VideoCapture
+#         self.camid = cam_id
+#         self.validCameras = None
+#         self.F_Width = F_Width
+#         self.F_Height = F_Height
+#         self.capture = VideoCapture
+#     def supercharge(self):
+#         from time import sleep
+#         __class__.get_Cam(self)
+#         __class__.set_cam(self)
+#         if self.capture.isOpened() is None and self.camid is not None:
+#             print("Err.x01! Missing frames, attempting to reconnect to stream!")
+#             sleep(5)
+#             self.capture.release()
+#             __class__.supercharge(self)
+#         self.capture.isOpened()
+#         return self.capture.read()
+#     def set_cam(self):
+#         from cv2 import CAP_PROP_FRAME_HEIGHT, CAP_PROP_FRAME_WIDTH
+#         if self.camid is None:
+#             print(f"Detected cameras! {self.validCameras}")
+#             self.camid = int(input("Please select your camera [Based on index!]: "))
+#         self.capture = self.capture(self.camid)
+#         self.capture.set(CAP_PROP_FRAME_WIDTH, self.F_Width)
+#         self.capture.set(CAP_PROP_FRAME_HEIGHT, self.F_Height)
+#     def get_Cam(self):
+#         from cv2_enumerate_cameras import enumerate_cameras
+#         if self.validCameras is None:
+#             self.validCameras = enumerate_cameras()
