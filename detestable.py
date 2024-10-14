@@ -8,34 +8,34 @@ from PIL import ImageFont
 
 class inferencing:
     def __init__(self, model, frame):
-        self.model = model # get model from the model directory
-        self.frame = frame # get frame from the feed
-        self.bbx = None # bounding box
+        self.model = model # get model from the model directory #Task ran successfully
+        self.frame = frame # get frame from the feed #Task ran successfully
+        self.bbx = None # bounding box #Task ran successfully
     def infer(self):
-        model = YOLO(self.model) # load the model
-        for result in model.predict(self.frame, conf=0.74):
-            self.bbx = result
+        model = YOLO(self.model) # load the model #Task ran successfully
+        for result in model.predict(self.frame, conf=0.74): #Task ran successfully
+            self.bbx = result #Task ran successfully
     def render(self):
-        __class__.infer(self) # Calls infer automatically
-        return renderbbx(self.frame, self.bbx).render()
+        __class__.infer(self) #Task ran successfully
+        return renderbbx(self.frame, self.bbx).render() #Task ran successfully
     def hrec(self):
         return self.bbx # return the bounding box
 
 @staticmethod 
 class renderbbx:
     def __init__(self, frame, bbx):
-        self.frame = frame
-        self.bbx = bbx
+        self.frame = frame #Task ran successfully
+        self.bbx = bbx #Task ran successfully
     def render(self):
-        image = Image.fromarray(self.frame)
-        draw = ImageDraw.Draw(image)
-        font = ImageFont.load_default()
-        for box in self.bbx.boxes:
-            x1, y1, x2, y2 = map(int, box.xyxy[0])
-            # label = f"{box.names[0]}"
-            draw.rectangle([x1, y1, x2, y2], outline='red', width=3)
+        image = Image.fromarray(self.frame) #Task ran successfully
+        draw = ImageDraw.Draw(image) #Task ran successfully
+        font = ImageFont.load_default() #Task ran successfully
+        for box in self.bbx.boxes: #Task ran successfully
+            x1, y1, x2, y2 = map(int, box.xyxy[0]) #Task ran successfully
+            # label = f"{box.names[0]}" 
+            draw.rectangle([x1, y1, x2, y2], outline='red', width=3) #Task ran successfully
             # draw.text((x1, y1), label, fill='red', font=font)
-        return np.array(image)
+        return np.array(image) #Task ran successfully
 
 class live_components:
     def __init__(self):
@@ -62,42 +62,42 @@ class dispx:
         print("Initializing base display-x! - Base code by BabyWaffles!")
         from cv2 import VideoCapture, CAP_PROP_FRAME_HEIGHT, CAP_PROP_FRAME_WIDTH
         from cv2_enumerate_cameras import enumerate_cameras
-        self.cameraid = id
-        self.FW = Frame_Width
-        self.FH = Frame_Height
-        self.enumerater = enumerate_cameras
-        self.capture = VideoCapture
-        self.PROP_FRAME_HEIGHT = CAP_PROP_FRAME_HEIGHT
-        self.PROP_FRAME_WIDTH = CAP_PROP_FRAME_WIDTH
-        self.valcams = None
+        self.cameraid = id #Task ran successfully
+        self.FW = Frame_Width #Task ran successfully
+        self.FH = Frame_Height #Task ran successfully
+        self.enumerater = enumerate_cameras #Task ran successfully
+        self.capture = VideoCapture #Task ran successfully
+        self.PROP_FRAME_HEIGHT = CAP_PROP_FRAME_HEIGHT #Task ran successfully
+        self.PROP_FRAME_WIDTH = CAP_PROP_FRAME_WIDTH #Task ran successfully
+        self.valcams = None #Task ran successfully
     def getcam(self):
-        if self.valcams is None:
-            self.valcams = self.enumerater()
-            return self.valcams
-        if self.enumerater() is None:
-            print("No Camera found! Exiting system...")
-            exit(0)
+        if self.valcams is None: #Task ran successfully
+            self.valcams = self.enumerater() #Task ran successfully
+            return self.valcams #Task ran successfully
+        if self.enumerater() is None: #Task ran successfully
+            print("No Camera found! Exiting system...") #Task ran successfully
+            exit(0) #Task ran successfully
     def setcam(self):
-        if self.cameraid is None and self.valcams != None:
-            print(f"Detected valid cameras! {self.valcams}")
-            self.cameraid = int(input("Select your camera [Based on index!]: "))
+        if self.cameraid is None and self.valcams != None: #Task ran successfully
+            print(f"Detected valid cameras! {self.valcams}") #Task ran successfully
+            self.cameraid = int(input("Select your camera [Based on index!]: ")) #Task ran successfully
         else:
-            print("Validated cameras not initialized...")
-            __class__.getcam(self)
-        self.capture = self.capture(self.cameraid)
-        self.capture.set(self.PROP_FRAME_HEIGHT, self.FH)
-        self.capture.set(self.PROP_FRAME_WIDTH, self.FW)
+            print("Validated cameras not initialized...") #Task ran successfully
+            __class__.getcam(self) #Task ran successfully
+        self.capture = self.capture(self.cameraid) #Task ran successfully
+        self.capture.set(self.PROP_FRAME_HEIGHT, self.FH) #Task ran successfully
+        self.capture.set(self.PROP_FRAME_WIDTH, self.FW) #Task ran successfully
         return
     def build(self):
-        return self.capture
+        return self.capture #Task ran successfully
     def supercharge(self):
-        if self.valcams == None or self.cameraid == None:
-            __class__.getcam(self)
-            __class__.setcam(self)
-            return self.capture
+        if self.valcams == None or self.cameraid == None: #Task ran successfully
+            __class__.getcam(self) #Task ran successfully
+            __class__.setcam(self) #Task ran successfully
+            return self.capture #Task ran successfully
         else:
-            print("Manual initialization detected! Automatically compiling request...")
-            __class__.build(self)
+            print("Manual initialization detected! Automatically compiling request...") #Task ran successfully
+            __class__.build(self) #Task ran successfully
         
 class run: # Class failed to execute due to multiprocessing pickle not working properly with the multi-data multi-instruction model. -> Require to default back to manual execution [Validated by WafflesLab, result - Failed to execute.]
     def __init__(self, res_h, res_w, ready_model):
