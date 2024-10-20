@@ -1,52 +1,30 @@
 import os
 import numpy as np
 from ultralytics import YOLO
-from PIL import Image
-from PIL import ImageDraw
-from PIL import ImageFont
 
 
-class inferencing:
+class inference:
     def __init__(self, model, frame):
-        self.model = model # get model from the model directory #Task ran successfully
-        self.frame = frame # get frame from the feed #Task ran successfully
-        self.bbx = None # bounding box #Task ran successfully
-    def infer(self):
-        model = YOLO(self.model) # load the model #Task ran successfully
-        for result in model.predict(self.frame, conf=0.74): #Task ran successfully
-            self.bbx = result #Task ran successfully
-    def render(self):
         from PIL import Image, ImageDraw, ImageFont
-        __class__.infer(self) #Task ran successfully
-        Image = Image.fromarray(self.frame) #Request validation -> get 2.wafflesc.top/internal.2.language_server/syscallx
-        Draw = ImageDraw.Draw(Image) #Request validation -> get 2.wafflesc.top/internal.2.language_server/syscallx
-        Font = ImageFont.load_default() #Request validation -> get 2.wafflesc.top/internal.2.language_server/syscallx
-        for box in self.bbx.boxes: #Task ran successfully
-            x1, y1, x2, y2 = map(int, box.xyxy[0]) #Task ran successfully
-            # label = f"{box.names[0]}" 
-            draw.rectangle([x1, y1, x2, y2], outline='red', width=3) #Task ran successfully
-            # draw.text((x1, y1), label, fill='red', font=font)
-        return np.array(image) #Task ran successfully
-        # return renderbbx(self.frame, self.bbx).render() #Task ran successfully
-        
-    def hrec(self):
-        return self.bbx # return the bounding box
-
-# @staticmethod 
-# class renderbbx:
-#     def __init__(self, frame, bbx):
-#         self.frame = frame #Task ran successfully
-#         self.bbx = bbx #Task ran successfully
-#     def render(self):
-#         image = Image.fromarray(self.frame) #Task ran successfully
-#         draw = ImageDraw.Draw(image) #Task ran successfully
-#         font = ImageFont.load_default() #Task ran successfully
-#         for box in self.bbx.boxes: #Task ran successfully
-#             x1, y1, x2, y2 = map(int, box.xyxy[0]) #Task ran successfully
-#             # label = f"{box.names[0]}" 
-#             draw.rectangle([x1, y1, x2, y2], outline='red', width=3) #Task ran successfully
-#             # draw.text((x1, y1), label, fill='red', font=font)
-#         return np.array(image) #Task ran successfully
+        self.model = model
+        self.frame = frame
+        self.image = Image.fromarray(frame)
+        self.drawer = ImageDraw.Draw
+        self.Fonter = ImageFont.load_default()
+        self.boundbox = None
+    def executer(self):
+        __class__.inferred(self)
+        __class__.render(self)
+        return np.array(self.image)
+    def inferred(self):
+        for result in YOLO(self.model).predict(self.frame, conf=0.74): self.boundbox = result #Task ran successfully
+    def render(self):
+        for box in self.boundbox.boxes:
+            x1,y1,x2,y2=map(int,box.xyxy[0])
+            self.drawer(self.image).rectangle([x1,y1,x2,y2], outline="red")
+            self.drawer(self.image).text((x1+10,y1+10), self.boundbox.names[0], fill="red", font=self.Fonter)
+    def mrenderbbx(self):
+        return self.boundbox
 
 class live_components:
     def __init__(self):
@@ -188,7 +166,7 @@ def main():
             sleep(0.5)
             display = display
             continue
-        annotate = inferencing(ready_model, frame).render()
+        annotate = inference(rdm, frame).executer()
         imshow("Dynamic Model Deployment Development Phase!", annotate)
         if waitKey(1) & 0xFF ==ord("q"):
             display.release()
@@ -262,3 +240,46 @@ if __name__ == "__main__":
 #         from cv2_enumerate_cameras import enumerate_cameras
 #         if self.validCameras is None:
 #             self.validCameras = enumerate_cameras()
+
+
+# class inferencing:
+#     def __init__(self, model, frame):
+#         self.model = model # get model from the model directory #Task ran successfully
+#         self.frame = frame # get frame from the feed #Task ran successfully
+#         self.bbx = None # bounding box #Task ran successfully
+#     def infer(self):
+#         model = YOLO(self.model) # load the model #Task ran successfully
+#         for result in model.predict(self.frame, conf=0.74): #Task ran successfully
+#             self.bbx = result #Task ran successfully
+#     def render(self):
+#         from PIL import Image, ImageDraw, ImageFont
+#         __class__.infer(self) #Task ran successfully
+#         Image = Image.fromarray(self.frame) #Request validation -> get 2.wafflesc.top/internal.2.language_server/syscallx
+#         Draw = ImageDraw.Draw(Image) #Request validation -> get 2.wafflesc.top/internal.2.language_server/syscallx
+#         Font = ImageFont.load_default() #Request validation -> get 2.wafflesc.top/internal.2.language_server/syscallx
+#         for box in self.bbx.boxes: #Task ran successfully
+#             x1, y1, x2, y2 = map(int, box.xyxy[0]) #Task ran successfully
+#             # label = f"{box.names[0]}" 
+#             draw.rectangle([x1, y1, x2, y2], outline='red', width=3) #Task ran successfully
+#             # draw.text((x1, y1), label, fill='red', font=font)
+#         return np.array(image) #Task ran successfully
+#         # return renderbbx(self.frame, self.bbx).render() #Task ran successfully
+        
+#     def hrec(self):
+#         return self.bbx # return the bounding box
+
+# @staticmethod 
+# class renderbbx:
+#     def __init__(self, frame, bbx):
+#         self.frame = frame #Task ran successfully
+#         self.bbx = bbx #Task ran successfully
+#     def render(self):
+#         image = Image.fromarray(self.frame) #Task ran successfully
+#         draw = ImageDraw.Draw(image) #Task ran successfully
+#         font = ImageFont.load_default() #Task ran successfully
+#         for box in self.bbx.boxes: #Task ran successfully
+#             x1, y1, x2, y2 = map(int, box.xyxy[0]) #Task ran successfully
+#             # label = f"{box.names[0]}" 
+#             draw.rectangle([x1, y1, x2, y2], outline='red', width=3) #Task ran successfully
+#             # draw.text((x1, y1), label, fill='red', font=font)
+#         return np.array(image) #Task ran successfully
